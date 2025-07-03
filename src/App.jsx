@@ -5,6 +5,7 @@ const ACCESS_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 
 function App() {
     const [dogArray, setDogArray] = useState([]);
+    const [displayDog, setDisplayDog] = useState(null);
 
     useEffect(() => {
         async function fetchDog() {
@@ -26,22 +27,27 @@ function App() {
         fetchDog();
     }, []);
 
-    // useEffect(() => {
-    //     console.log("Updated dogArray:", dogArray);
-    // }, [dogArray]);
-
+    function getRandomDog() {
+        const dogIndex = Math.floor(Math.random() * dogArray.length - 1);
+        const randomDog = dogArray[dogIndex];
+        return randomDog;
+    }
+    function handleDisplay() {
+        setDisplayDog(getRandomDog());
+        console.log(displayDog);
+    }
     return (
         <>
             <div className="app-container">
                 <History />
-                <AnimalLayout />
+                <AnimalLayout handleDisplay={handleDisplay} />
                 <BanList />
             </div>
         </>
     );
 }
 
-function AnimalLayout() {
+function AnimalLayout({ handleDisplay }) {
     return (
         <div className="animal-container">
             <h1>Dogs</h1>
@@ -53,14 +59,16 @@ function AnimalLayout() {
                     {/* <img src="" alt="" /> */}
                 </div>
             </div>
-            <button className="new-dog-btn">🔀New Dog</button>
+            <button className="new-dog-btn" onClick={handleDisplay}>
+                🔀New Dog
+            </button>
         </div>
     );
 }
 
 function History() {
     return (
-        <div className="history-div">
+        <div className="history-container">
             <h2>Who have we seen so far</h2>
             <div className="history-cards">
                 <div className="history-card">
@@ -73,7 +81,7 @@ function History() {
 }
 function BanList() {
     return (
-        <div className="ban-lists">
+        <div className="ban-lists-container">
             <p>Select an attribute in your listing to ban</p>
             <div className="ban-list">
                 <button>placeHolder</button>

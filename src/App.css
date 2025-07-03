@@ -4,3 +4,28 @@
     padding: 2rem;
     text-align: center;
 }
+.app-container {
+    width: 800px;
+    margin: 0 auto;
+    display: flex;
+    gap: 5px;
+}
+.animal-container {
+    flex-grow: 2;
+    border: 1px solid white;
+    padding: 0.5rem;
+}
+.history-container {
+    /* flex-grow: 1; */
+    border: 1px solid white;
+}
+.ban-lists-container {
+    /* flex-grow: 1; */
+    border: 1px solid white;
+}
+.animal-card {
+    margin-bottom: 1rem;
+}
+.new-dog-btn {
+    cursor: pointer;
+}
