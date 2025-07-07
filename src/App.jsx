@@ -7,6 +7,7 @@ function App() {
     const [dataArray, setDataArray] = useState([]);
     const [displayData, setDisplayData] = useState(null);
     const [historyData, setHistoryData] = useState([]);
+    const [banList, setBanList] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -27,8 +28,31 @@ function App() {
         fetchData();
     }, []);
 
+    function populateBanList(value) {
+        setBanList((prev) => {
+            if (!prev.includes(value)) {
+                return [...prev, value];
+            }
+            return prev;
+        });
+
+        const newList = dataArray.filter(
+            (item) =>
+                !banList.includes(item?.culture) &&
+                !banList.includes(item?.century) &&
+                !banList.includes(item?.classification) &&
+                !banList.includes(item?.division)
+        );
+
+        setDataArray(newList);
+        console.log(newList);
+        console.log(dataArray);
+        // console.log(newList);
+
+        // console.log(banList);
+    }
     function getRandomData() {
-        const dataIndex = Math.floor(Math.random() * dataArray.length - 1);
+        const dataIndex = Math.floor(Math.random() * dataArray.length);
         const randomData = dataArray[dataIndex];
         return randomData;
     }
@@ -37,7 +61,8 @@ function App() {
         setDisplayData(randomObject);
         setHistoryData((prev) => [...prev, randomObject]);
 
-        console.log(displayData);
+        // console.log(displayData);
+        // console.log(dataArray);
     }
     return (
         <>
@@ -46,14 +71,15 @@ function App() {
                 <AnimalLayout
                     handleDisplay={handleDisplay}
                     displayData={displayData}
+                    populateBanList={populateBanList}
                 />
-                <BanList />
+                <BanList banList={banList} />
             </div>
         </>
     );
 }
 // "https://nrs.harvard.edu/urn-3:HUAM:78315_dynmc"
-function AnimalLayout({ handleDisplay, displayData }) {
+function AnimalLayout({ handleDisplay, displayData, populateBanList }) {
     // console.log(displayData);
     return (
         <div className="animal-container">
@@ -62,17 +88,54 @@ function AnimalLayout({ handleDisplay, displayData }) {
             <div className="animal-card">
                 <h2 className="name">{displayData && displayData.title}</h2>
                 <div className="ban-attributes">
-                    {displayData && <button> {displayData.culture}</button>}
-                    {displayData && <button> {displayData.century}</button>}
-                    {displayData && (
-                        <button> {displayData.classification}</button>
+                    {displayData && displayData.culture && (
+                        <button
+                            onClick={() =>
+                                populateBanList(displayData?.culture)
+                            }
+                        >
+                            {" "}
+                            {displayData?.culture}
+                        </button>
                     )}
-                    {displayData && <button> {displayData.division}</button>}
+                    {displayData && displayData.century && (
+                        <button
+                            onClick={() =>
+                                populateBanList(displayData?.century)
+                            }
+                        >
+                            {" "}
+                            {displayData.century}
+                        </button>
+                    )}
+                    {displayData && displayData.classification && (
+                        <button
+                            onClick={() =>
+                                populateBanList(displayData?.classification)
+                            }
+                        >
+                            {" "}
+                            {displayData.classification}
+                        </button>
+                    )}
+                    {displayData && displayData.division && (
+                        <button
+                            onClick={() =>
+                                populateBanList(displayData?.division)
+                            }
+                        >
+                            {" "}
+                            {displayData.division}
+                        </button>
+                    )}
                 </div>
 
                 <img
                     className="display-image"
-                    src={displayData && displayData.images[0].baseimageurl}
+                    src={
+                        displayData?.primaryimageurl ||
+                        displayData?.images?.[0]?.baseimageurl
+                    }
                     alt=""
                 />
             </div>
@@ -89,11 +152,11 @@ function History({ historyData }) {
             <h2>Who have we seen so far</h2>
             <div className="history-cards">
                 {historyData &&
-                    historyData.map((item) => (
-                        <div className="history-card">
+                    historyData.map((item, i) => (
+                        <div key={i} className="history-card">
                             <img
                                 className="history-image"
-                                src={item.primaryimageurl}
+                                src={item?.primaryimageurl}
                                 alt=""
                             />
                             <p>
@@ -106,12 +169,14 @@ function History({ historyData }) {
         </div>
     );
 }
-function BanList() {
+function BanList({ banList }) {
     return (
         <div className="ban-lists-container">
             <p>Select an attribute in your listing to ban</p>
             <div className="ban-list">
-                <button>placeHolder</button>
+                {banList.map((item, i) => (
+                    <button key={i}>{item}</button>
+                ))}
             </div>
         </div>
     );
