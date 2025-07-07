@@ -4,63 +4,76 @@ import "./App.css";
 const ACCESS_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 
 function App() {
-    const [dogArray, setDogArray] = useState([]);
-    const [displayDog, setDisplayDog] = useState(null);
+    const [dataArray, setDataArray] = useState([]);
+    const [displayData, setDisplayData] = useState(null);
 
     useEffect(() => {
-        async function fetchDog() {
+        async function fetchData() {
             try {
                 const response = await fetch(
-                    " https://api.thedogapi.com/v1/breeds",
-                    {
-                        headers: {
-                            "x-api-key": ACCESS_KEY,
-                        },
-                    }
+                    `https://api.harvardartmuseums.org/object?apikey=${ACCESS_KEY}&hasimage=1&size=100`
                 );
-                const dog = await response.json();
-                setDogArray(dog);
+                const data = await response.json();
+
+                const filterData = data.records.filter(
+                    (item) => item.primaryimageurl !== null
+                );
+                setDataArray(filterData);
             } catch (error) {
                 console.log("Error", error);
             }
         }
-        fetchDog();
+        fetchData();
     }, []);
 
     function getRandomDog() {
-        const dogIndex = Math.floor(Math.random() * dogArray.length - 1);
-        const randomDog = dogArray[dogIndex];
+        const dogIndex = Math.floor(Math.random() * dataArray.length - 1);
+        const randomDog = dataArray[dogIndex];
         return randomDog;
     }
     function handleDisplay() {
-        setDisplayDog(getRandomDog());
-        console.log(displayDog);
+        setDisplayData(getRandomDog());
+        // console.log(dataArray);
+        console.log(displayData);
     }
     return (
         <>
             <div className="app-container">
                 <History />
-                <AnimalLayout handleDisplay={handleDisplay} />
+                <AnimalLayout
+                    handleDisplay={handleDisplay}
+                    displayData={displayData}
+                />
                 <BanList />
             </div>
         </>
     );
 }
-
-function AnimalLayout({ handleDisplay }) {
+// "https://nrs.harvard.edu/urn-3:HUAM:78315_dynmc"
+function AnimalLayout({ handleDisplay, displayData }) {
+    // console.log(displayData);
     return (
         <div className="animal-container">
             <h1>Dogs</h1>
             <p>Different dog breeds</p>
             <div className="animal-card">
-                <h2 className="name">Dog name</h2>
+                {/* <h2 className="name">{displayData && displayData.name}</h2>
                 <div className="ban-attributes">
-                    <button>attributes to ban</button>
-                    {/* <img src="" alt="" /> */}
-                </div>
+                    {displayData && <button> {displayData.height.metric}</button>}
+                    {displayData && <button> {displayData.life_span}</button>}
+                    {displayData && (
+                        <button> {displayData.weight.imperial}</button>
+                    )}
+                </div> */}
+
+                <img
+                    className="display-image"
+                    src={displayData && displayData.images[0].baseimageurl}
+                    alt=""
+                />
             </div>
             <button className="new-dog-btn" onClick={handleDisplay}>
-                🔀New Dog
+                🔀New image
             </button>
         </div>
     );
