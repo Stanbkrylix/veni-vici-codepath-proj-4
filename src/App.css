@@ -5,19 +5,28 @@
     text-align: center;
 }
 .app-container {
-    width: 800px;
+    width: 900px;
+    height: 100vh;
     margin: 0 auto;
     display: flex;
     gap: 5px;
 }
 .animal-container {
     flex-grow: 2;
+    width: 500px;
     border: 1px solid white;
     padding: 0.5rem;
 }
 .history-container {
     /* flex-grow: 1; */
     border: 1px solid white;
+}
+.history-cards {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    /* white-space: nowrap; */
+    max-height: 700px;
 }
 .ban-lists-container {
     /* flex-grow: 1; */
@@ -33,6 +42,20 @@
     object-fit: cover;
     box-shadow: 0 4px 8px rgba(214, 213, 213, 0.1);
 }
+.history-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
 .new-dog-btn {
     cursor: pointer;
+}
+
+.ban-attributes {
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
 }

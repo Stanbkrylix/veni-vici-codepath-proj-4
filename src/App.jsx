@@ -6,6 +6,7 @@ const ACCESS_KEY = import.meta.env.VITE_APP_ACCESS_KEY;
 function App() {
     const [dataArray, setDataArray] = useState([]);
     const [displayData, setDisplayData] = useState(null);
+    const [historyData, setHistoryData] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -26,20 +27,22 @@ function App() {
         fetchData();
     }, []);
 
-    function getRandomDog() {
-        const dogIndex = Math.floor(Math.random() * dataArray.length - 1);
-        const randomDog = dataArray[dogIndex];
-        return randomDog;
+    function getRandomData() {
+        const dataIndex = Math.floor(Math.random() * dataArray.length - 1);
+        const randomData = dataArray[dataIndex];
+        return randomData;
     }
     function handleDisplay() {
-        setDisplayData(getRandomDog());
-        // console.log(dataArray);
+        const randomObject = getRandomData();
+        setDisplayData(randomObject);
+        setHistoryData((prev) => [...prev, randomObject]);
+
         console.log(displayData);
     }
     return (
         <>
             <div className="app-container">
-                <History />
+                <History historyData={historyData} />
                 <AnimalLayout
                     handleDisplay={handleDisplay}
                     displayData={displayData}
@@ -57,14 +60,15 @@ function AnimalLayout({ handleDisplay, displayData }) {
             <h1>Dogs</h1>
             <p>Different dog breeds</p>
             <div className="animal-card">
-                {/* <h2 className="name">{displayData && displayData.name}</h2>
+                <h2 className="name">{displayData && displayData.title}</h2>
                 <div className="ban-attributes">
-                    {displayData && <button> {displayData.height.metric}</button>}
-                    {displayData && <button> {displayData.life_span}</button>}
+                    {displayData && <button> {displayData.culture}</button>}
+                    {displayData && <button> {displayData.century}</button>}
                     {displayData && (
-                        <button> {displayData.weight.imperial}</button>
+                        <button> {displayData.classification}</button>
                     )}
-                </div> */}
+                    {displayData && <button> {displayData.division}</button>}
+                </div>
 
                 <img
                     className="display-image"
@@ -79,15 +83,22 @@ function AnimalLayout({ handleDisplay, displayData }) {
     );
 }
 
-function History() {
+function History({ historyData }) {
     return (
         <div className="history-container">
             <h2>Who have we seen so far</h2>
             <div className="history-cards">
-                <div className="history-card">
-                    {/* <img src="" alt="" /> */}
-                    <p>placeHolder</p>
-                </div>
+                {historyData &&
+                    historyData.map((item) => (
+                        <div className="history-card">
+                            <img
+                                className="history-image"
+                                src={item.primaryimageurl}
+                                alt=""
+                            />
+                            <p>placeHolder</p>
+                        </div>
+                    ))}
             </div>
         </div>
     );
