@@ -14,12 +14,18 @@
 .animal-container {
     flex-grow: 2;
     width: 500px;
+    height: 100%;
     border: 1px solid white;
     padding: 0.5rem;
+}
+.name {
+    font-size: 1.2rem;
 }
 .history-container {
     /* flex-grow: 1; */
     border: 1px solid white;
+    padding: 0.5rem;
+    height: 100%;
 }
 .history-cards {
     display: flex;
@@ -31,6 +37,7 @@
 .ban-lists-container {
     /* flex-grow: 1; */
     border: 1px solid white;
+    height: 100%;
 }
 .animal-card {
     margin-bottom: 1rem;

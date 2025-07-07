@@ -57,8 +57,8 @@ function AnimalLayout({ handleDisplay, displayData }) {
     // console.log(displayData);
     return (
         <div className="animal-container">
-            <h1>Dogs</h1>
-            <p>Different dog breeds</p>
+            <h1>Museum Arts</h1>
+            <p>Historical Arts</p>
             <div className="animal-card">
                 <h2 className="name">{displayData && displayData.title}</h2>
                 <div className="ban-attributes">
@@ -96,7 +96,10 @@ function History({ historyData }) {
                                 src={item.primaryimageurl}
                                 alt=""
                             />
-                            <p>placeHolder</p>
+                            <p>
+                                A {item.culture} {item.classification} from the{" "}
+                                {item.century}
+                            </p>
                         </div>
                     ))}
             </div>
