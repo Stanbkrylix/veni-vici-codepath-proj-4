@@ -6,7 +6,7 @@
 }
 .app-container {
     width: 900px;
-    height: 100vh;
+    height: 80vh;
     margin: 0 auto;
     display: flex;
     gap: 5px;
@@ -33,7 +33,7 @@
     flex-direction: column;
     overflow: auto;
     /* white-space: nowrap; */
-    max-height: 700px;
+    max-height: 80%;
 }
 .ban-lists-container {
     /* flex-grow: 1; */
@@ -46,6 +46,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
+    height: 100%;
 }
 .animal-card {
     margin-bottom: 1rem;

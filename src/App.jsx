@@ -25,6 +25,7 @@ function App() {
                 setDataArray(filterData);
             } catch (error) {
                 console.log("Error", error);
+                alert(`Error: ${error}`);
             }
         }
         fetchData();
