@@ -30,39 +30,53 @@ function App() {
 
     function populateBanList(value) {
         setBanList((prev) => {
+            // Add only if it's not already included
             if (!prev.includes(value)) {
-                return [...prev, value];
+                const updatedBanList = [...prev, value];
+
+                // Apply filter using the updated list
+                const newList = dataArray.filter(
+                    (item) =>
+                        !updatedBanList.includes(item?.culture) &&
+                        !updatedBanList.includes(item?.century) &&
+                        !updatedBanList.includes(item?.classification) &&
+                        !updatedBanList.includes(item?.division)
+                );
+                setDataArray(newList);
+
+                return updatedBanList;
             }
+
+            // If no change, return previous
             return prev;
         });
-
-        const newList = dataArray.filter(
-            (item) =>
-                !banList.includes(item?.culture) &&
-                !banList.includes(item?.century) &&
-                !banList.includes(item?.classification) &&
-                !banList.includes(item?.division)
-        );
-
-        setDataArray(newList);
-        console.log(newList);
-        console.log(dataArray);
-        // console.log(newList);
-
-        // console.log(banList);
     }
+
     function getRandomData() {
+        if (!dataArray.length) return null;
         const dataIndex = Math.floor(Math.random() * dataArray.length);
         const randomData = dataArray[dataIndex];
         return randomData;
     }
     function handleDisplay() {
         const randomObject = getRandomData();
+        if (!randomObject) {
+            alert("No more artwork to show — you've banned everything!");
+            return;
+        }
         setDisplayData(randomObject);
         setHistoryData((prev) => [...prev, randomObject]);
 
-        // console.log(displayData);
+        console.log(displayData);
+        console.log(dataArray);
+    }
+    function handleUnBan(value) {
+        console.log(value);
         // console.log(dataArray);
+        console.log(banList);
+
+        setBanList((prev) => prev.filter((item) => item !== value));
+        console.log(banList);
     }
     return (
         <>
@@ -73,7 +87,7 @@ function App() {
                     displayData={displayData}
                     populateBanList={populateBanList}
                 />
-                <BanList banList={banList} />
+                <BanList banList={banList} handleUnBan={handleUnBan} />
             </div>
         </>
     );
@@ -169,13 +183,15 @@ function History({ historyData }) {
         </div>
     );
 }
-function BanList({ banList }) {
+function BanList({ banList, handleUnBan }) {
     return (
         <div className="ban-lists-container">
             <p>Select an attribute in your listing to ban</p>
             <div className="ban-list">
                 {banList.map((item, i) => (
-                    <button key={i}>{item}</button>
+                    <button onClick={() => handleUnBan(item)} key={i}>
+                        {item}
+                    </button>
                 ))}
             </div>
         </div>
