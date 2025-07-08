@@ -64,9 +64,6 @@ function App() {
         }
         setDisplayData(randomObject);
         setHistoryData((prev) => [...prev, randomObject]);
-
-        console.log(displayData);
-        console.log(dataArray);
     }
     function handleUnBan(value) {
         setBanList((prev) => {
@@ -80,7 +77,7 @@ function App() {
                     !updatedBanList.includes(item?.division)
             );
 
-            setDataArray(newList); // ✅ filtered from original list
+            setDataArray(newList);
             return updatedBanList;
         });
     }
@@ -98,9 +95,8 @@ function App() {
         </>
     );
 }
-// "https://nrs.harvard.edu/urn-3:HUAM:78315_dynmc"
+
 function AnimalLayout({ handleDisplay, displayData, populateBanList }) {
-    // console.log(displayData);
     return (
         <div className="animal-container">
             <h1>Museum Arts</h1>
