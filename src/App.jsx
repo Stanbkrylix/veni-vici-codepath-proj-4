@@ -8,6 +8,7 @@ function App() {
     const [displayData, setDisplayData] = useState(null);
     const [historyData, setHistoryData] = useState([]);
     const [banList, setBanList] = useState([]);
+    const [originalDataArray, setOriginalDataArray] = useState([]);
 
     useEffect(() => {
         async function fetchData() {
@@ -20,6 +21,7 @@ function App() {
                 const filterData = data.records.filter(
                     (item) => item.primaryimageurl !== null
                 );
+                setOriginalDataArray(filterData);
                 setDataArray(filterData);
             } catch (error) {
                 console.log("Error", error);
@@ -30,24 +32,20 @@ function App() {
 
     function populateBanList(value) {
         setBanList((prev) => {
-            // Add only if it's not already included
             if (!prev.includes(value)) {
                 const updatedBanList = [...prev, value];
 
-                // Apply filter using the updated list
-                const newList = dataArray.filter(
+                const newList = originalDataArray.filter(
                     (item) =>
                         !updatedBanList.includes(item?.culture) &&
                         !updatedBanList.includes(item?.century) &&
                         !updatedBanList.includes(item?.classification) &&
                         !updatedBanList.includes(item?.division)
                 );
-                setDataArray(newList);
 
+                setDataArray(newList);
                 return updatedBanList;
             }
-
-            // If no change, return previous
             return prev;
         });
     }
@@ -71,12 +69,20 @@ function App() {
         console.log(dataArray);
     }
     function handleUnBan(value) {
-        console.log(value);
-        // console.log(dataArray);
-        console.log(banList);
+        setBanList((prev) => {
+            const updatedBanList = prev.filter((item) => item !== value);
 
-        setBanList((prev) => prev.filter((item) => item !== value));
-        console.log(banList);
+            const newList = originalDataArray.filter(
+                (item) =>
+                    !updatedBanList.includes(item?.culture) &&
+                    !updatedBanList.includes(item?.century) &&
+                    !updatedBanList.includes(item?.classification) &&
+                    !updatedBanList.includes(item?.division)
+            );
+
+            setDataArray(newList); // ✅ filtered from original list
+            return updatedBanList;
+        });
     }
     return (
         <>
